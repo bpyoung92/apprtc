@@ -32,6 +32,8 @@
   <script src="/callstats/callstats.min.js"></script>
   <script src="/callstats/sha.js"></script>
   <script src="/callstats/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js"></script>
+
 
 </head>
 
@@ -43,6 +45,7 @@
   <div id="videos">
     <video id="mini-video" autoplay muted></video>
     <video id="remote-video" autoplay></video>
+    <div id="remote-video-container"></div>
     <video id="local-video" autoplay muted></video>
   </div>
 
@@ -80,6 +83,8 @@
   </footer>
 
   <div id="icons" class="hidden">
+
+    <div id="web-vr-button"></div>
 
     <svg id="mute-audio" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
     <title>title</title>

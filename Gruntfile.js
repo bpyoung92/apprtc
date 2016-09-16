@@ -163,6 +163,10 @@ module.exports = function(grunt) {
             'src/web_app/js/storage.js',
             'src/web_app/js/util.js',
             'src/web_app/js/windowport.js',
+            'src/web_app/js/Three.js',
+            'src/web_app/js/WebVR.js',
+            'src/web_app/js/VREffect.js',
+            'src/web_app/js/VRControls.js',
           ]
         },
         options: {

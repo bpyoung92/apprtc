@@ -35,6 +35,7 @@ var UI_CONSTANTS = {
   newRoomLink: '#new-room-link',
   privacyLinks: '#privacy',
   remoteVideo: '#remote-video',
+  remoteVideoContainer: '#remote-video-container',
   rejoinButton: '#rejoin-button',
   rejoinDiv: '#rejoin-div',
   rejoinLink: '#rejoin-link',
@@ -48,6 +49,7 @@ var UI_CONSTANTS = {
   sharingDiv: '#sharing-div',
   statusDiv: '#status-div',
   videosDiv: '#videos',
+  webVRButton: '#web-vr-button',
 };
 
 // The controller that connects the Call with the UI.
@@ -62,6 +64,7 @@ var AppController = function(loadingParams) {
   this.sharingDiv_ = $(UI_CONSTANTS.sharingDiv);
   this.statusDiv_ = $(UI_CONSTANTS.statusDiv);
   this.remoteVideo_ = $(UI_CONSTANTS.remoteVideo);
+  this.remoteVideoContainer_ = $(UI_CONSTANTS.remoteVideoContainer);
   this.videosDiv_ = $(UI_CONSTANTS.videosDiv);
   this.roomLinkHref_ = $(UI_CONSTANTS.roomLinkHref);
   this.rejoinDiv_ = $(UI_CONSTANTS.rejoinDiv);
@@ -69,6 +72,7 @@ var AppController = function(loadingParams) {
   this.newRoomLink_ = $(UI_CONSTANTS.newRoomLink);
   this.rejoinButton_ = $(UI_CONSTANTS.rejoinButton);
   this.newRoomButton_ = $(UI_CONSTANTS.newRoomButton);
+  this.webVRButton_ = $(UI_CONSTANTS.webVRButton);
 
   this.newRoomButton_.addEventListener('click',
       this.onNewRoomClick_.bind(this), false);
@@ -334,7 +338,7 @@ AppController.prototype.transitionToActive_ = function() {
   this.miniVideo_.srcObject = this.localVideo_.srcObject;
 
   // Transition opacity from 0 to 1 for the remote and mini videos.
-  this.activate_(this.remoteVideo_);
+  this.vrActivate_(this.remoteVideo_, this.remoteVideoContainer_);
   this.activate_(this.miniVideo_);
   // Transition opacity from 1 to 0 for the local video.
   this.deactivate_(this.localVideo_);
@@ -510,6 +514,98 @@ AppController.prototype.show_ = function(element) {
 
 AppController.prototype.activate_ = function(element) {
   element.classList.add('active');
+};
+
+AppController.prototype.vrActivate_ = function(video, videoContainer) {
+  video.hidden = true;
+
+  // console.log("*********************************************");
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+
+  // camera
+  this.vrCamera_ = new THREE.PerspectiveCamera(60, width / height, 1, 1000);
+  this.vrCamera_.position.set(0, 0, 0.1);
+
+  // scene
+  this.vrScene_ = new THREE.Scene();
+
+  // video texture
+  var texture = new THREE.VideoTexture(video);
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.format = THREE.RGBFormat;
+
+  // left
+  var geometry = new THREE.SphereGeometry(100, 32, 32, 0);
+  geometry.scale(-1, 1, 1);
+  var faceVertexUvs = geometry.faceVertexUvs[0];
+  for (i = 0; i < faceVertexUvs.length; i++) {
+    var uvs = faceVertexUvs[i];
+    var face = geometry.faces[i];
+    for (var j = 0; j < 3; j++) {
+      var x = face.vertexNormals[j].x;
+      var y = face.vertexNormals[j].y;
+      var z = face.vertexNormals[j].z;
+
+      if (i < faceVertexUvs.length / 2) {
+        var correction = (x == 0 && z == 0) ?
+            1 :
+            (Math.acos(y) / Math.sqrt(x * x + z * z)) * (2 / Math.PI);
+        uvs[j].x = x * (423 / 1920) * correction + (480 / 1920);
+        uvs[j].y = z * (423 / 1080) * correction + (600 / 1080);
+
+      } else {
+        var correction = (x == 0 && z == 0) ?
+            1 :
+            (Math.acos(-y) / Math.sqrt(x * x + z * z)) * (2 / Math.PI);
+        uvs[j].x = -1 * x * (423 / 1920) * correction + (1440 / 1920);
+        uvs[j].y = z * (423 / 1080) * correction + (600 / 1080);
+      }
+    }
+  }
+  geometry.rotateZ(-Math.PI / 2);
+  var material = new THREE.MeshBasicMaterial({map: texture});
+  var mesh = new THREE.Mesh(geometry, material);
+  this.vrScene_.add(mesh);
+
+  // renderer
+  var renderer = new THREE.WebGLRenderer();
+  renderer.setClearColor(0x101010);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(width, height);
+  videoContainer.appendChild(renderer.domElement);
+
+  // vr effect
+  this.vrEffect_ = new THREE.VREffect(renderer);
+  this.vrEffect_.scale = 0;
+  this.vrEffect_.setSize(width, height);
+  this.webVRButton_.appendChild(WEBVR.getButton(this.vrEffect_));
+
+  // vr controls
+  this.controls_ = new THREE.VRControls(this.vrCamera_);
+
+  window.addEventListener('resize', this.vrResize_.bind(this), false);
+  this.vrAnimate_();
+};
+
+AppController.prototype.vrAnimate_ = function() {
+  this.vrEffect_.requestAnimationFrame(this.vrAnimate_.bind(this));
+  this.vrRender_();
+};
+
+AppController.prototype.vrRender_ = function() {
+  this.controls_.update();
+  this.vrEffect_.render(this.vrScene_, this.vrCamera_);
+};
+
+AppController.prototype.vrResize_ = function() {
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+
+  this.vrCamera_.aspect = width / height;
+  this.vrCamera_.updateProjectionMatrix();
+  this.vrEffect_.setSize(width, height);
 };
 
 AppController.prototype.deactivate_ = function(element) {
