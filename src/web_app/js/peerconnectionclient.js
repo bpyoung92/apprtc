@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 The WebRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2016 The WebRTC project authors. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -28,6 +28,7 @@
 var PeerConnectionClient = function(params, startTime) {
   this.params_ = params;
   this.startTime_ = startTime;
+
   trace('Creating RTCPeerConnnection with:\n' +
     '  config: \'' + JSON.stringify(params.peerConnectionConfig) + '\';\n' +
     '  constraints: \'' + JSON.stringify(params.peerConnectionConstraints) +
@@ -60,7 +61,6 @@ var PeerConnectionClient = function(params, startTime) {
   this.onsignalingstatechange = null;
 
   this.callstatsInit = false;
-  this.loopBackStream = null;
 };
 
 // Set up audio and video regardless of what devices are present.
@@ -160,12 +160,6 @@ PeerConnectionClient.prototype.close = function() {
   this.pc_.close();
   this.pc_ = null;
   this.callstatsInit = false;
-  if (this.loopBackStream !== null) {
-    this.loopBackStream.getTracks().forEach(function(track) {
-      track.stop();
-    });
-    this.loopBackStream = null;
-  }
 };
 
 PeerConnectionClient.prototype.getPeerConnectionStates = function() {
@@ -260,12 +254,7 @@ PeerConnectionClient.prototype.processSignalingMessage_ = function(message) {
       return;
     }
     this.setRemoteSdp_(message);
-    // For the loopback peerconnection, the answer is called in the
-    // onremotestreamadded event to ensure the remote stream is available for
-    // cloning before answering..
-    if (this.params_.clientId !== 'LOOPBACK_CLIENT_ID_2') {
-      this.doAnswer_();
-    }
+    this.doAnswer_();
   } else if (message.type === 'answer' && this.isInitiator_) {
     if (this.pc_.signalingState !== 'have-local-offer') {
       trace('ERROR: remote answer received in unexpected state: ' +
@@ -453,7 +442,6 @@ PeerConnectionClient.prototype.reportErrorToCallstats =
   }
 };
 
-// Try to init the callstats library.
 PeerConnectionClient.prototype.initCallstats_ = function(successCallback) {
   trace('Init callstats.');
   var appId = this.params_.callstatsParams.appId;
@@ -472,7 +460,6 @@ PeerConnectionClient.prototype.initCallstats_ = function(successCallback) {
   this.callstats = new callstats(null, io, jsSHA);
   // jscs:enable requireCapitalizedConstructors
   /* jshint newcap: true */
-
   this.userId = this.params_.roomId + (this.isInitiator_ ? '-0' : '-1');
   var statsCallback = null;
   var configParams = {

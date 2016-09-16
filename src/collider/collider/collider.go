@@ -11,6 +11,7 @@ import (
 	"golang.org/x/net/websocket"
 	"encoding/json"
 	"errors"
+	"html"
 	"io"
 	"io/ioutil"
 	"log"
@@ -55,7 +56,7 @@ func (c *Collider) Run(p int, useTls bool) {
 				tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
 				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
 				tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-				tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+				tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
 			},
 			PreferServerCipherSuites: true,
 		}
@@ -98,7 +99,7 @@ func (c *Collider) httpHandler(w http.ResponseWriter, r *http.Request) {
 
 	p := strings.Split(r.URL.Path, "/")
 	if len(p) != 3 {
-		c.httpError("Invalid path: "+r.URL.Path, w)
+		c.httpError("Invalid path: "+html.EscapeString(r.URL.Path), w)
 		return
 	}
 	rid, cid := p[1], p[2]
