@@ -324,8 +324,16 @@ path.on {
   display: none;
 }
 
+rect.on {
+  display: none;
+}
+
 /* off icons are displayed by default */
 path.off {
+  display: block;
+}
+
+rect.off {
   display: block;
 }
 
@@ -334,8 +342,16 @@ svg.on path.on {
   display: block;
 }
 
+svg.on rect.on {
+  display: block;
+}
+
 /* off icons are hidden when parent svg has class 'on' */
 svg.on path.off {
+  display: none;
+}
+
+svg.on rect.off {
   display: none;
 }
 
@@ -383,15 +399,27 @@ svg:hover {
   fill: #407cf7;
 }
 
-#switch-video {
+#enable-vr {
   transition: 200ms;
 }
 
-#switch-video:hover {
+#enable-vr:hover {
   background: #407cf7;
 }
 
-#switch-video:hover circle {
+#enable-vr:hover circle {
+  fill: #407cf7;
+}
+
+#vr-controls-toggle {
+  transition: 200ms;
+}
+
+#vr-controls-toggle:hover {
+  background: #407cf7;
+}
+
+#vr-controls-toggle:hover circle {
   fill: #407cf7;
 }
 

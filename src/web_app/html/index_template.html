@@ -32,8 +32,8 @@
   <script src="/callstats/callstats.min.js"></script>
   <script src="/callstats/sha.js"></script>
   <script src="/callstats/socket.io.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js"></script>
 
 </head>
 
@@ -84,8 +84,6 @@
 
   <div id="icons" class="hidden">
 
-    <div id="web-vr-button"></div>
-
     <svg id="mute-audio" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
     <title>title</title>
       <circle cx="24" cy="24" r="34">
@@ -109,6 +107,28 @@
       </circle>
       <path class="on" transform="scale(0.8), translate(7,6)" d="M10 32h6v6h4V28H10v4zm6-16h-6v4h10V10h-4v6zm12 22h4v-6h6v-4H28v10zm4-22v-6h-4v10h10v-4h-6z" fill="white"/>
       <path class="off" transform="scale(0.8), translate(7,6)"  d="M14 28h-4v10h10v-4h-6v-6zm-4-8h4v-6h6v-4H10v10zm24 14h-6v4h10V28h-4v6zm-6-24v4h6v6h4V10H28z" fill="white"/>
+    </svg>
+
+    <svg id="enable-vr" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+      <circle cx="24" cy="24" r="34">
+        <title>Enter VR Camera Mode</title>
+      </circle>
+      <rect class="on" x="8" y="8" width="32" height="32" rx="4" ry="4" fill="white"/>
+      <rect class="off" x="4" y="4" width="40" height="40" rx="32" ry="32" fill="white"/>
+    </svg>
+
+    <svg id="vr-controls-toggle" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
+      <circle cx="24" cy="24" r="34">
+        <title>Enter VR Headset Mode</title>
+      </circle>
+      <path class="on" transform="translate(0,35), scale(0.025), scale(1,-1)" d="m 416,256 q -66,0 -113,47 -47,47 -47,113 v 704 q 0,66 47,113 47,47 113,47 h 1088 q 66,0 113,-47 47,-47 47,-113 V 416 q 0,-66 -47,-113 -47,-47 -113,-47 H 416 z m -32,864 V 416 q 0,-13 9.5,-22.5 Q 403,384 416,384 h 1088 q 13,0 22.5,9.5 9.5,9.5 9.5,22.5 v 704 q 0,13 -9.5,22.5 -9.5,9.5 -22.5,9.5 H 416 q -13,0 -22.5,-9.5 Q 384,1133 384,1120 z M 1760,192 h 160 V 96 Q 1920,56 1873,28 1826,0 1760,0 H 160 Q 94,0 47,28 0,56 0,96 v 96 H 160 1760 z M 1040,96 q 16,0 16,16 0,16 -16,16 H 880 q -16,0 -16,-16 0,-16 16,-16 h 160 z" fill="white"/>
+      <path class="off" transform="scale(0.7), translate(42,34)" d="M18.125-20.083h-52.479c-1.958,0-3.607,1.71-3.607,3.821V15.16
+      c0,2.109,1.65,3.82,3.685,3.82h14.334c1.537,0,2.855-0.976,3.409-2.36l4.167-10.436c0.704-1.758,2.376-2.998,4.328-2.998
+      c1.951,0,3.626,1.24,4.326,2.998l4.17,10.436c0.556,1.385,1.872,2.36,3.33,2.36h14.336c2.113,0,3.762-1.711,3.762-3.82v-31.423
+      C21.887-18.373,20.238-20.083,18.125-20.083L18.125-20.083z M-21.61,6.322c-3.667,0-6.636-3.077-6.636-6.874
+      c0-3.798,2.97-6.874,6.636-6.874c3.666,0,6.628,3.076,6.628,6.874C-14.982,3.246-17.95,6.322-21.61,6.322L-21.61,6.322z
+       M5.541,6.319c-3.665,0-6.633-3.074-6.633-6.871c0-3.797,2.969-6.871,6.633-6.871s6.633,3.074,6.633,6.871
+      C12.174,3.246,9.205,6.319,5.541,6.319L5.541,6.319z" fill="white"/>
     </svg>
 
     <svg id="hangup" class="hidden" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="-10 -10 68 68">
