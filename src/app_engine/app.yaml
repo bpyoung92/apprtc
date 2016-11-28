@@ -1,4 +1,4 @@
-application: apprtc
+application: vrtest-149020
 version: 9
 runtime: python27
 threadsafe: true
@@ -43,7 +43,7 @@ handlers:
 
 libraries:
 - name: jinja2
-  version: latest
+  version: "2.6"
 - name: ssl
   version: latest
 - name: pycrypto
@@ -54,7 +54,7 @@ env_variables:
   # Only change these while developing, do not commit to source!
   # Use appcfg.py --env_variable=CALLSTATS_APP_ID:ID  \
   #               --env_variable=CALLSTATS_APP_SECRET:SECRET \
-  #               --env_variable=ICE_SERVER_API_KEY:KEY \
+  #               --env_variable=ICE_SERVER_API_KEY:AIzaSyCVEb9ZMK6-CVyPzr2bl9oNJvteWDkFtfE \
   # in order to replace variables when deploying.
   CALLSTATS_APP_ID: none
   CALLSTATS_APP_SECRET: none
