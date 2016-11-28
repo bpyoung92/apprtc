@@ -30,16 +30,19 @@ WSS_INSTANCE_HOST_KEY = 'host_port_pair'
 WSS_INSTANCE_NAME_KEY = 'vm_name'
 WSS_INSTANCE_ZONE_KEY = 'zone'
 WSS_INSTANCES = [{
-    WSS_INSTANCE_HOST_KEY: 'apprtc-ws.webrtc.org:443',
-    WSS_INSTANCE_NAME_KEY: 'wsserver-std',
-    WSS_INSTANCE_ZONE_KEY: 'us-central1-a'
-}, {
-    WSS_INSTANCE_HOST_KEY: 'apprtc-ws-2.webrtc.org:443',
-    WSS_INSTANCE_NAME_KEY: 'wsserver-std-2',
-    WSS_INSTANCE_ZONE_KEY: 'us-central1-f'
-}]
+    WSS_INSTANCE_HOST_KEY: '104.196.217.124:443',
+    WSS_INSTANCE_NAME_KEY: 'collider',
+    WSS_INSTANCE_ZONE_KEY: 'us-east1-b'
+}
+# ,{
+#     WSS_INSTANCE_HOST_KEY: '104.196.160.24:8089',
+#     WSS_INSTANCE_NAME_KEY: 'collider',
+#     WSS_INSTANCE_ZONE_KEY: 'us-central1-f'
+# }
+]
 
-WSS_HOST_PORT_PAIRS = [ins[WSS_INSTANCE_HOST_KEY] for ins in WSS_INSTANCES]
+WSS_HOST_PORT_PAIRS = ['104.196.217.124:443', '104.196.217.124:443']
+# WSS_HOST_PORT_PAIRS = [ins[WSS_INSTANCE_HOST_KEY] for ins in WSS_INSTANCES]
 
 # memcache key for the active collider host.
 WSS_HOST_ACTIVE_HOST_KEY = 'wss_host_active_host'
