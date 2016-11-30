@@ -618,14 +618,14 @@ AppController.prototype.vrActivate_ = function(video, videoContainer) {
   texture.format = THREE.RGBFormat;
 
   if (this.loadingParams_.equirectangular) {
-    var material = new THREE.MeshBasicMaterial({map: texture});
-    var mesh = new THREE.Mesh(this.vrCreateGeometryFisheye_(), material);
-  }
-  else {
     var material = new THREE.MeshBasicMaterial({map: texture,
       side: THREE.BackSide,
     });
     var mesh = new THREE.Mesh(this.vrCreateGeometryEquirectangular_(), material);
+  }
+  else {
+    var material = new THREE.MeshBasicMaterial({map: texture});
+    var mesh = new THREE.Mesh(this.vrCreateGeometryFisheye_(), material);
   }
 
   this.vrScene_.add(mesh);
