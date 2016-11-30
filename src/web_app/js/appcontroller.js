@@ -508,9 +508,13 @@ AppController.prototype.enableVRToggle_ = function() {
   }
   else {
     this.vrActivate_(this.remoteVideo_, this.remoteVideoContainer_);
-    this.show_(this.VRControlsSvg);
-    document.querySelector('svg#enable-vr title').textContent =
-        'Exit VR Camera Mode';
+    if (typeof navigator.getVRDisplays == 'function') {
+      this.show_(this.VRControlsSvg);
+      document.querySelector('svg#enable-vr title').textContent =
+          'Exit VR Camera Mode';
+    } else {
+      trace('No VR hardware found.');
+    }
   }
   this.enableVRIconSet_.toggle();
 };
@@ -532,7 +536,7 @@ AppController.prototype.toggleVRControls_ = function() {
   else {
     var res = this.vrEffect_.requestPresent();
     var VRIconSet = this.toggleVRControlsIconSet_;
-    res.then(function(value) {
+    res.then(function() {
       trace('Entering VR Headset Mode.');
       VRIconSet.toggle();  // Must use global since within promise function
       document.querySelector('svg#vr-controls-toggle title').textContent =
@@ -613,7 +617,7 @@ AppController.prototype.vrActivate_ = function(video, videoContainer) {
   texture.magFilter = THREE.LinearFilter;
   texture.format = THREE.RGBFormat;
 
-  if (!this.loadingParams_.equirectangular) {
+  if (this.loadingParams_.equirectangular) {
     var material = new THREE.MeshBasicMaterial({map: texture});
     var mesh = new THREE.Mesh(this.vrCreateGeometryFisheye_(), material);
   }
@@ -648,6 +652,7 @@ AppController.prototype.vrActivate_ = function(video, videoContainer) {
 AppController.prototype.vrDeactivate_ = function(video, videoContainer) {
   trace('Exiting VR Camera Mode.');
   video.hidden = false;
+  this.vrEffect_.dispose();
   videoContainer.removeChild(videoContainer.childNodes[0]);
 };
 
